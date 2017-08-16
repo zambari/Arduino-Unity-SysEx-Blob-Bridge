@@ -41,9 +41,9 @@ Problem is what happens if you use your Arduino in a more involved setup
 	└────────────┘       │          └────────────┘    │ 
 	                     │                            │ 
 	                     │                            │    
-	            ┌────────────┐                        │
+	            ┌────────────┐                        │	
 	            │            │                        │ 
-	            │     ESX    │ ←--------- MIDI--------   
+	            │     ESX    │ ←--------- MIDI--------   NRPN Visual Feedback Loop
 	            │            │                  
 	            └────────────┘                                  
 
