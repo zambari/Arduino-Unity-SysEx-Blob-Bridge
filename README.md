@@ -9,7 +9,7 @@ There's countless ways to achieve this, but here the constraint was that I want 
 
 MIDI is a serial, one to one, unidirectional protocol, compatible with RS232 in terms of logical levels (as long as you force it to non-standard baud of 31250). Its not quite compatible electrically though as you need a transoptor on the input stage, and be prepared to drive such isolator on the output stage. 
 
- Arduino, which is a single USART microcontroller, cannot operate two bauds at the same time, so while MIDI Connection is required, you cannot communicate with the device via USB
+ Arduino, which is a single USART microcontroller, cannot operate two bauds at the same time, so while MIDI Connection is required, you cannot communicate with the device via USB. This is a solution to this particular problem, but it also creates a very defined transmission state for binary objects, so CRC checks, type casting etc could be achieved (proof of concept at the moment)
  
  Normally, transmission is simple
  
