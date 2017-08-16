@@ -41,7 +41,7 @@ Problem is what happens if you use your Arduino in a more involved setup
 	└────────────┘       │          └────────────┘    │ 
 	                     │                            │ 
 	                     │                            │    			Split NRPN Loop
-	            ┌────────────┐                        │			For visual feedback 
+	            ┌────────────┐                        │			for visual feedback 
 	            │            │                        │ 
 	            │     ESX    │ ←--------- MIDI--------   
 	            │            │                  
