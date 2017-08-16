@@ -14,12 +14,12 @@ MIDI is a serial, one to one, unidirectional protocol, compatible with RS232 in 
  Normally, transmission is simple
  
 
-	┌────────────┐                          
+	┌────────────┐     (usb OR midi, not at the same time)                     
 	│            │                          ┌────────────────────────────────┐
  	│ Arduinoul  │  ←-- <?> -- MIDI ---→    │  SYNTH                         │
 	│            │                          │    ┌ █ █ │ █ █ █ │ █ █ │ █ █ █┬┘
-	└────────────┘       │    (can't        └────┘─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴┘
-                    	     │    have both a the same time)
+	└────────────┘       │                  └────┘─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴┘
+                    	     │    
 	                     │                  ┌────────────┐                  
 	                     │                  │            │                  
  	                      ---- USB -----→   │    PC      │    
