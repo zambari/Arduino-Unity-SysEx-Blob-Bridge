@@ -20,7 +20,7 @@ MIDI is a serial, one to one, unidirectional protocol, compatible with RS232 in 
 	│            │                          │    ┌ █ █ │ █ █ █ │ █ █ │ █ █ █┬┘
 	└────────────┘       │                  └────┘─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴┘
                     	     │    
-	                     │                  ┌────────────┐                  
+			     │                  ┌────────────┐                  
 	                     │                  │            │                  
  	                      ---- USB -----→   │    PC      │    
 	                                        │            │                    
