@@ -1,5 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "port": "COM3",
+    "port": "/dev/cu.usbmodem1d1111",
     "sketch": "SysexBrige_ArduinoProject.ino"
 }

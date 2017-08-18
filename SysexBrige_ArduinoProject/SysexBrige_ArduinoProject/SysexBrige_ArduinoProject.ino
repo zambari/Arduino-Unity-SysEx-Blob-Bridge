@@ -1,4 +1,5 @@
 
+
 // comment out to disable serial echo
 #define SERIAL_ECHO 
 
@@ -10,30 +11,19 @@
 #define BUFSIZE64 45
 #define BAUD_MIDI 31250
 #define BAUD_USART 9600
+
+
+#define USE_BAUD BAUD_MIDI
 #define MIDI_ACTIVE_UPDATE_TIME 500
 
 #include <LinkedList.h>
 #include <Base64.h>
 long nextMills;
 long nextClk;
-/*
-┌───────┐                  ┌───────┐  
-│            │                  │            │ ---- MIDI----→    THE GUYS (midi clock splitting)
-│ Arduinoul  │  ---- MIDI----→ │    BCR     │ ----              ┌─────────────────────────┐
-│            │  ←----          │            │    │             │  SYNTH                                    │
-└───────┘      │          └───────┘    │             │    ┌ █ █ │ █ █ █ │ █ █ │ █ █ █┬┘ 
-                     │                              │             └───  
-                     │                               ↓    
-            ┌───────┐             ┌─────────┐
-            │            │             │ ▆▆▆▆▆▆▆▆ │  
-            │    ESX     │ ←-- MIDI---│ ▆ PC / UNITY   │ <- YOU ARE HERE
-            │            │             │ ▆▆▆▆▆▆▆▆ │  C# prototyping tool
-            └───────┘             └─────────┘                   
 
 
-*/
 
-
+//https://github.com/zambari/Arduino-Unity-SysEx-Blob-Bridge
 
 /// SYSEX TRANSMIT BEGIN
 /// a library maybe
@@ -46,8 +36,24 @@ bool isRecieving=false;
 
 
   public:
+    void TransmitBlob(char * s)
+    { 
+        int counter=0;
+        while(s[counter]!=0 && counter<BUFSIZE)
+        counter++;
+        TransmitBlob(s,counter);
+    }
   void TransmitBlob(char * s, int blobByteCount)
   { 
+/*
+    Serial.print("blobtramit\ncount is ");
+    Serial.print(blobByteCount);
+    Serial.print("\n");  
+    Serial.print(s); 
+     Serial.print("\n");*/
+
+    for (int i=0;i<blobByteCount;i++)
+    bufferRaw[i]=s[i];
     int encodedLen= base64_encode(bufferBase64,bufferRaw,blobByteCount); // *output, *input, *le
     Serial.print((char)SYSEX_START);
     for (int i=0;i<blobByteCount;i++)
@@ -57,47 +63,44 @@ bool isRecieving=false;
 
   void Restart() // Restarts program from beginning but does not reset the peripherals and registers
 {
-asm volatile ("  jmp 0");  
+        asm volatile ("  jmp 0");  
 } 
-void runCommand1()
-{
-  Serial.print("commadn1");
-}
-void runCommand2()
-{
-  Serial.print("commadn2");
 
-
-}
 enum ArduinoCallOrders { cmdRestart, cmdCommand1, cmdCommand2};
 
+void  RunCommand(int cmd,  char* blobPointer, int decodedLen)   
+{      Serial.print("\n runCommand \n ");
+        Serial.print(cmd);
+        Serial.print("\n");
+        switch (cmd)
+        {
+        case 0: Restart();
+        case 1:
 
-void  OnRecieveBlob(  char* blobPointer, int decodedLen)        // DO USEFUL STUFF HERE
-{Serial.write("recieved");
-  // an exapmle is a restart order, or other sort of basic RPC
-     
-  char command=blobPointer[0];
-
-   switch (command )
-   {
-     case (cmdRestart ) : 
-       Serial.print("restarting");
-       Restart();
-     break;
- 
-      
-     case (cmdCommand1) : 
-      runCommand1();
-     break;
-         
-     case (cmdCommand2) : 
-       runCommand2();
-     break;
-   }
-
+            TransmitBlob("ala ma ko");  // here you can light a LED or whaevert
+        break;
+        case 2:
+            TransmitBlob("ala ma kota");
+        break;
+        case 3:
+            TransmitBlob("ala ma kotaz");
+        break;
+        case 4: 
+        TransmitBlob("ala ma kotazaa");
+        break;
+        case 5: 
+          TransmitBlob("ala ma kotazaza");
+        break;
+        case 6: 
+          TransmitBlob("ala ma kotazazaza");
+        break;
+        }
 }
 
-
+void  OnRecieveBlob(  char* blobPointer, int decodedLen)        // DO USEFUL STUFF HERE
+{
+  RunCommand(blobPointer[0],blobPointer+1,decodedLen-1);
+}
 
   bool handleRpc(char thisChar)  // need to escape character
   { 
@@ -142,24 +145,14 @@ SysexTransmit transmit;
 /// SYSEX TRANSMIT END
 
 
-
-
-
-
-
-
-
-
 // plain old arduino code:
-
 
 void setup() {
     //Serial.begin(BAUD_MIDI);
-    Serial.begin(BAUD_USART); // for easier debugging
-    Serial.println("\nArduino Restarted\n");
+    Serial.begin(USE_BAUD); // for easier debugging
+    Serial.println("\nArduino Started\n");
 
 }
-
 
 
 
@@ -167,7 +160,7 @@ void loop() {
   while (Serial.available())
    transmit.handleRpc(Serial.read());
   
-  // OPTIONAL BEING
+  // OPTIONAL Keepalive BEGIN
   if (millis()>nextMills)
   {
     nextMills=millis()+MIDI_ACTIVE_UPDATE_TIME;
