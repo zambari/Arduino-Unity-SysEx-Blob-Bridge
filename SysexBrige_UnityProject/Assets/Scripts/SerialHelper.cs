@@ -55,9 +55,20 @@ public class SerialHelper : MonoBehaviour
        if (syseqblock==null) syseqblock = new SysexBlockTransfer();
         Debug.Log("Serial.checkOpen()=" + Serial.checkOpen());
 
+    
+    }
+    
+    public void showOnLCD1(string s)
+    {
+        string v=(char)1+s;
+        sendAsSysexBlock(v);
     }
 
-
+    public void showOnLCD2(string s)
+    {
+        string v=(char)2+s;
+        sendAsSysexBlock(v);
+    }
     public void sendAsSysexBlock(string s)
     {
         if (string.IsNullOrEmpty(s)) return;

@@ -57,6 +57,8 @@ using System.IO.Ports;
 public class Serial : MonoBehaviour
 {
 
+public const int baud = 31250;
+
 	/// <summary>
 	/// Enable notification of data as it arrives
 	/// Sends OnSerialData(string data) message
@@ -190,7 +192,7 @@ public class Serial : MonoBehaviour
 			s_debug = true;
 		}
 
-		checkOpen (9600);
+		checkOpen (baud);
 
 	}
 
@@ -419,7 +421,7 @@ public class Serial : MonoBehaviour
 	/// </summary>
 	/// <returns><c>true</c>, if port is opened, <c>false</c> otherwise.</returns>
 	/// <param name="portSpeed">Port speed.</param>
-	public static bool checkOpen (int portSpeed = 9600)
+	public static bool checkOpen (int portSpeed = baud)
 	{
 
 		if (s_serial == null) {
@@ -435,6 +437,7 @@ public class Serial : MonoBehaviour
 			}
 
 			s_serial = new SerialPort (portName, portSpeed);
+			s_serial.BaudRate=baud;
 
 			s_serial.Open ();
 			//print ("default ReadTimeout: " + s_serial.ReadTimeout);
